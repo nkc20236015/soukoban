@@ -35,7 +35,7 @@ public class Sokoban : MonoBehaviour
 
     public float tileSize; // タイルのサイズ
 
-    public Sprite wallSprite;   //NONE（壁）のスプライト
+    public Sprite Sprite;   //目的地にブロックが乗っているときのスプライト
     public Sprite groundSprite; // 地面のスプライト
     public Sprite targetSprite; // 目的地のスプライト
     public Sprite playerSprite; // プレイヤーのスプライト

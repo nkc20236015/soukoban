@@ -218,7 +218,7 @@ RectTransform:
   m_Children:
   - {fileID: 821895293}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -304,7 +304,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 81c92b7e42501c048b6dd9cfd2a67a3c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -329,7 +329,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &280157873
 GameObject:
@@ -430,11 +430,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageFile: {fileID: 4900000, guid: 0690a961eb41f594682e03c1ae0643b8, type: 3}
   tileSize: 0.64
-  wallSprite: {fileID: 21300000, guid: 12131758c5ab5cc44af2b38a8f26b411, type: 3}
+  Sprite: {fileID: 0}
   groundSprite: {fileID: 21300000, guid: 957f6f30f6e92364bbab6d376a03b456, type: 3}
   targetSprite: {fileID: 21300000, guid: 1c442ac417ccdc044a400f9b0d8c12b3, type: 3}
   playerSprite: {fileID: 21300000, guid: 81c92b7e42501c048b6dd9cfd2a67a3c, type: 3}
-  blockSprite: {fileID: 21300000, guid: 12131758c5ab5cc44af2b38a8f26b411, type: 3}
+  blockSprite: {fileID: 21300000, guid: 7cf723ae97057b8419590be638cf4e88, type: 3}
 --- !u!4 &561046880
 Transform:
   m_ObjectHideFlags: 0
@@ -692,7 +692,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageFile: {fileID: 4900000, guid: 0690a961eb41f594682e03c1ae0643b8, type: 3}
   tileSize: 0.64
-  wallSprite: {fileID: 21300000, guid: 12131758c5ab5cc44af2b38a8f26b411, type: 3}
+  Sprite: {fileID: 0}
   groundSprite: {fileID: 21300000, guid: 2c975e61c3f827f4d80eb86b39577560, type: 3}
   targetSprite: {fileID: 21300000, guid: 1eb6bdf3f9e960848a5cb7ea3b3da942, type: 3}
   playerSprite: {fileID: 21300000, guid: 81c92b7e42501c048b6dd9cfd2a67a3c, type: 3}
