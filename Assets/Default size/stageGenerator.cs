@@ -234,25 +234,25 @@ public class Sokoban : MonoBehaviour
         if ( isClear ) return;
 
         // 上矢印が押された場合
-        if ( Input.GetKeyDown( KeyCode.UpArrow ) )
+        if ( Input.GetKeyDown( KeyCode.W ) )
         {
             // プレイヤーが上に移動できるか検証
             TryMovePlayer( DirectionType.UP );
         }
         // 右矢印が押された場合
-        else if ( Input.GetKeyDown( KeyCode.RightArrow ) )
+        else if ( Input.GetKeyDown( KeyCode.D ) )
         {
             // プレイヤーが右に移動できるか検証
             TryMovePlayer( DirectionType.RIGHT );
         }
         // 下矢印が押された場合
-        else if ( Input.GetKeyDown( KeyCode.DownArrow ) )
+        else if ( Input.GetKeyDown( KeyCode.S ) )
         {
             // プレイヤーが下に移動できるか検証
             TryMovePlayer( DirectionType.DOWN );
         }
         // 左矢印が押された場合
-        else if ( Input.GetKeyDown( KeyCode.LeftArrow ) )
+        else if ( Input.GetKeyDown( KeyCode.A) )
         {
             // プレイヤーが左に移動できるか検証
             TryMovePlayer( DirectionType.LEFT );
