@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Sokoban : MonoBehaviour
 {
@@ -256,6 +257,11 @@ public class Sokoban : MonoBehaviour
         {
             // プレイヤーが左に移動できるか検証
             TryMovePlayer( DirectionType.LEFT );
+        }
+        //Rを押すとリセット
+        if (Input.GetKeyDown( KeyCode.R))
+        {
+            SceneManager.LoadScene("GameScene");
         }
     }
 
