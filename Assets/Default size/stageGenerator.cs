@@ -1,97 +1,105 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Sokoban : MonoBehaviour
 {
-    // ƒ^ƒCƒ‹‚Ìí—Ş
+    // ã‚¿ã‚¤ãƒ«ã®ç¨®é¡
     private enum TileType
     {
-        NONE, // ‰½‚à–³‚¢
-        GROUND, // ’n–Ê
-        TARGET, // –Ú“I’n
-        PLAYER, // ƒvƒŒƒCƒ„[
-        BLOCK, // ƒuƒƒbƒN
+        NONE, // ä½•ã‚‚ç„¡ã„
+        GROUND, // åœ°é¢
+        TARGET, // ç›®çš„åœ°
+        PLAYER, // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼
+        BLOCK, // ãƒ–ãƒ­ãƒƒã‚¯
 
-        PLAYER_ON_TARGET, // ƒvƒŒƒCƒ„[i–Ú“I’n‚Ìãj
-        BLOCK_ON_TARGET, // ƒuƒƒbƒNi–Ú“I’n‚Ìãj
+        PLAYER_ON_TARGET, // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ï¼ˆç›®çš„åœ°ã®ä¸Šï¼‰
+        BLOCK_ON_TARGET, // ãƒ–ãƒ­ãƒƒã‚¯ï¼ˆç›®çš„åœ°ã®ä¸Šï¼‰
     }
 
-    // •ûŒü‚Ìí—Ş
+    // æ–¹å‘ã®ç¨®é¡
     private enum DirectionType
     {
-        UP, // ã
-        RIGHT, // ‰E
-        DOWN, // ‰º
-        LEFT, // ¶
+        UP, // ä¸Š
+        RIGHT, // å³
+        DOWN, // ä¸‹
+        LEFT, // å·¦
     }
 
-    public TextAsset stageFile; // ƒXƒe[ƒW\‘¢‚ª‹Lq‚³‚ê‚½ƒeƒLƒXƒgƒtƒ@ƒCƒ‹
+    public TextAsset stageFile; // ã‚¹ãƒ†ãƒ¼ã‚¸æ§‹é€ ãŒè¨˜è¿°ã•ã‚ŒãŸãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«
 
-    private int rows; // s”
-    private int columns; // —ñ”
-    private TileType[,] tileList; // ƒ^ƒCƒ‹î•ñ‚ğŠÇ—‚·‚é“ñŸŒ³”z—ñ
+    private int rows; // è¡Œæ•°
+    private int columns; // åˆ—æ•°
+    private TileType[,] tileList; // ã‚¿ã‚¤ãƒ«æƒ…å ±ã‚’ç®¡ç†ã™ã‚‹äºŒæ¬¡å…ƒé…åˆ—
 
-    public float tileSize; // ƒ^ƒCƒ‹‚ÌƒTƒCƒY
+    public float tileSize; // ã‚¿ã‚¤ãƒ«ã®ã‚µã‚¤ã‚º
 
-    public Sprite Sprite;   //–Ú“I’n‚ÉƒuƒƒbƒN‚ªæ‚Á‚Ä‚¢‚é‚Æ‚«‚ÌƒXƒvƒ‰ƒCƒg
-    public Sprite groundSprite; // ’n–Ê‚ÌƒXƒvƒ‰ƒCƒg
-    public Sprite targetSprite; // –Ú“I’n‚ÌƒXƒvƒ‰ƒCƒg
-    public Sprite playerSprite; // ƒvƒŒƒCƒ„[‚ÌƒXƒvƒ‰ƒCƒg
-    public Sprite blockSprite; // ƒuƒƒbƒN‚ÌƒXƒvƒ‰ƒCƒg
+    public Sprite Sprite;   //ç›®çš„åœ°ã«ãƒ–ãƒ­ãƒƒã‚¯ãŒä¹—ã£ã¦ã„ã‚‹ã¨ãã®ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆ
+    public Sprite groundSprite; // åœ°é¢ã®ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆ
+    public Sprite targetSprite; // ç›®çš„åœ°ã®ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆ
+    public Sprite playerSprite; // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆ
+    public Sprite blockSprite; // ãƒ–ãƒ­ãƒƒã‚¯ã®ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆ
 
-    private GameObject player; // ƒvƒŒƒCƒ„[‚ÌƒQ[ƒ€ƒIƒuƒWƒFƒNƒg
-    private Vector2 middleOffset; // ’†SˆÊ’u
-    private int blockCount; // ƒuƒƒbƒN‚Ì”
-    private bool isClear; // ƒQ[ƒ€‚ğƒNƒŠƒA‚µ‚½ê‡ true
+    private GameObject player; // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+    private Vector2 middleOffset; // ä¸­å¿ƒä½ç½®
+    private int blockCount; // ãƒ–ãƒ­ãƒƒã‚¯ã®æ•°
+    private bool isClear; // ã‚²ãƒ¼ãƒ ã‚’ã‚¯ãƒªã‚¢ã—ãŸå ´åˆ true
 
-    // ŠeˆÊ’u‚É‘¶İ‚·‚éƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚ğŠÇ—‚·‚é˜A‘z”z—ñ
+    //ã‚¹ãƒ†ãƒ¼ã‚¸ãƒ•ã‚¡ã‚¤ãƒ«
+    string[] stage = {"stage1","stage2","stage3","stageEX" };
+
+    int cnt;
+
+    // å„ä½ç½®ã«å­˜åœ¨ã™ã‚‹ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç®¡ç†ã™ã‚‹é€£æƒ³é…åˆ—
     private Dictionary<GameObject, Vector2Int> gameObjectPosTable = new Dictionary<GameObject, Vector2Int>();
+    
 
-    // ƒQ[ƒ€ŠJn‚ÉŒÄ‚Ño‚³‚ê‚é
+    // ã‚²ãƒ¼ãƒ é–‹å§‹æ™‚ã«å‘¼ã³å‡ºã•ã‚Œã‚‹
     private void Start()
     {
-        LoadTileData(); // ƒ^ƒCƒ‹‚Ìî•ñ‚ğ“Ç‚İ‚Ş
-        CreateStage(); // ƒXƒe[ƒW‚ğì¬
+        LoadTileData(); // ã‚¿ã‚¤ãƒ«ã®æƒ…å ±ã‚’èª­ã¿è¾¼ã‚€
+        CreateStage(); // ã‚¹ãƒ†ãƒ¼ã‚¸ã‚’ä½œæˆ
     }
 
-    // ƒ^ƒCƒ‹‚Ìî•ñ‚ğ“Ç‚İ‚Ş
+    // ã‚¿ã‚¤ãƒ«ã®æƒ…å ±ã‚’èª­ã¿è¾¼ã‚€
     private void LoadTileData()
     {
-        // ƒ^ƒCƒ‹‚Ìî•ñ‚ğˆês‚²‚Æ‚É•ªŠ„
+        //string path = stage[cnt];
+        var stageFile = Resources.Load(stage[cnt]) as TextAsset;
+        // ã‚¿ã‚¤ãƒ«ã®æƒ…å ±ã‚’ä¸€è¡Œã”ã¨ã«åˆ†å‰²
         var lines = stageFile.text.Split
         (
             new[] { '\r', '\n' },
             StringSplitOptions.RemoveEmptyEntries
         );
 
-        // ƒ^ƒCƒ‹‚Ì—ñ”‚ğŒvZ
-        var nums = lines[ 0 ].Split( new[] { ',' } );
+        // ã‚¿ã‚¤ãƒ«ã®åˆ—æ•°ã‚’è¨ˆç®—
+        var nums = lines[0].Split(new[] { ',' });
 
-        // ƒ^ƒCƒ‹‚Ì—ñ”‚Æs”‚ğ•Û
-        rows = lines.Length; // s”
-        columns = nums.Length; // —ñ”
+        // ã‚¿ã‚¤ãƒ«ã®åˆ—æ•°ã¨è¡Œæ•°ã‚’ä¿æŒ
+        rows = lines.Length; // è¡Œæ•°
+        columns = nums.Length; // åˆ—æ•°
 
-        // ƒ^ƒCƒ‹î•ñ‚ğ int Œ^‚Ì‚QŸŒ³”z—ñ‚Å•Û
-        tileList = new TileType[ columns, rows ];
-        for ( int y = 0; y < rows; y++ )
+        // ã‚¿ã‚¤ãƒ«æƒ…å ±ã‚’ int å‹ã®ï¼’æ¬¡å…ƒé…åˆ—ã§ä¿æŒ
+        tileList = new TileType[columns, rows];
+        for (int y = 0; y < rows; y++)
         {
-            // ˆê•¶š‚¸‚Âæ“¾
-            var st = lines[ y ];
-            nums = st.Split( new[] { ',' } );
-            for ( int x = 0; x < columns; x++ )
+            // ä¸€æ–‡å­—ãšã¤å–å¾—
+            var st = lines[y];
+            nums = st.Split(new[] { ',' });
+            for (int x = 0; x < columns; x++)
             {
-                // “Ç‚İ‚ñ‚¾•¶š‚ğ”’l‚É•ÏŠ·‚µ‚Ä•Û
-                tileList[ x, y ] = ( TileType )int.Parse( nums[ x ] );
+                // èª­ã¿è¾¼ã‚“ã æ–‡å­—ã‚’æ•°å€¤ã«å¤‰æ›ã—ã¦ä¿æŒ
+                tileList[x, y] = (TileType)int.Parse(nums[x]);
             }
         }
     }
 
-    // ƒXƒe[ƒW‚ğì¬
+    // ã‚¹ãƒ†ãƒ¼ã‚¸ã‚’ä½œæˆ
     private void CreateStage()
     {
-        // ƒXƒe[ƒW‚Ì’†SˆÊ’u‚ğŒvZ
+        // ã‚¹ãƒ†ãƒ¼ã‚¸ã®ä¸­å¿ƒä½ç½®ã‚’è¨ˆç®—
         middleOffset.x = columns * tileSize * 0.5f - tileSize * 0.5f;
         middleOffset.y = rows * tileSize * 0.5f - tileSize * 0.5f; ;
 
@@ -101,92 +109,92 @@ public class Sokoban : MonoBehaviour
             {
                 var val = tileList[ x, y ];
 
-                // ‰½‚à–³‚¢êŠ‚Í–³‹
+                // ä½•ã‚‚ç„¡ã„å ´æ‰€ã¯ç„¡è¦–
                 if ( val == TileType.NONE ) continue;
 
-                // ƒ^ƒCƒ‹‚Ì–¼‘O‚És”Ô†‚Æ—ñ”Ô†‚ğ•t—^
+                // ã‚¿ã‚¤ãƒ«ã®åå‰ã«è¡Œç•ªå·ã¨åˆ—ç•ªå·ã‚’ä»˜ä¸
                 var name = "tile" + y + "_" + x;
 
-                // ƒ^ƒCƒ‹‚ÌƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚ğì¬
+                // ã‚¿ã‚¤ãƒ«ã®ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆ
                 var tile = new GameObject( name );
 
-                // ƒ^ƒCƒ‹‚ÉƒXƒvƒ‰ƒCƒg‚ğ•`‰æ‚·‚é‹@”\‚ğ’Ç‰Á
+                // ã‚¿ã‚¤ãƒ«ã«ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã‚’æç”»ã™ã‚‹æ©Ÿèƒ½ã‚’è¿½åŠ 
                 var sr = tile.AddComponent<SpriteRenderer>();
 
-                // ƒ^ƒCƒ‹‚ÌƒXƒvƒ‰ƒCƒg‚ğİ’è
+                // ã‚¿ã‚¤ãƒ«ã®ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã‚’è¨­å®š
                 sr.sprite = groundSprite;
 
-                // ƒ^ƒCƒ‹‚ÌˆÊ’u‚ğİ’è
+                // ã‚¿ã‚¤ãƒ«ã®ä½ç½®ã‚’è¨­å®š
                 tile.transform.position = GetDisplayPosition( x, y );
 
-                // –Ú“I’n‚Ìê‡
+                // ç›®çš„åœ°ã®å ´åˆ
                 if ( val == TileType.TARGET )
                 {
-                    // –Ú“I’n‚ÌƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚ğì¬
+                    // ç›®çš„åœ°ã®ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆ
                     var destination = new GameObject( "destination" );
 
-                    // –Ú“I’n‚ÉƒXƒvƒ‰ƒCƒg‚ğ•`‰æ‚·‚é‹@”\‚ğ’Ç‰Á
+                    // ç›®çš„åœ°ã«ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã‚’æç”»ã™ã‚‹æ©Ÿèƒ½ã‚’è¿½åŠ 
                     sr = destination.AddComponent<SpriteRenderer>();
 
-                    // –Ú“I’n‚ÌƒXƒvƒ‰ƒCƒg‚ğİ’è
+                    // ç›®çš„åœ°ã®ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã‚’è¨­å®š
                     sr.sprite = targetSprite;
 
-                    // –Ú“I’n‚Ì•`‰æ‡‚ğè‘O‚É‚·‚é
+                    // ç›®çš„åœ°ã®æç”»é †ã‚’æ‰‹å‰ã«ã™ã‚‹
                     sr.sortingOrder = 1;
 
-                    // –Ú“I’n‚ÌˆÊ’u‚ğİ’è
+                    // ç›®çš„åœ°ã®ä½ç½®ã‚’è¨­å®š
                     destination.transform.position = GetDisplayPosition( x, y );
                 }
-                // ƒvƒŒƒCƒ„[‚Ìê‡
+                // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å ´åˆ
                 if ( val == TileType.PLAYER )
                 {
-                    // ƒvƒŒƒCƒ„[‚ÌƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚ğì¬
+                    // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆ
                     player = new GameObject( "player" );
 
-                    // ƒvƒŒƒCƒ„[‚ÉƒXƒvƒ‰ƒCƒg‚ğ•`‰æ‚·‚é‹@”\‚ğ’Ç‰Á
+                    // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã‚’æç”»ã™ã‚‹æ©Ÿèƒ½ã‚’è¿½åŠ 
                     sr = player.AddComponent<SpriteRenderer>();
 
-                    // ƒvƒŒƒCƒ„[‚ÌƒXƒvƒ‰ƒCƒg‚ğİ’è
+                    // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã‚’è¨­å®š
                     sr.sprite = playerSprite;
 
-                    // ƒvƒŒƒCƒ„[‚Ì•`‰æ‡‚ğè‘O‚É‚·‚é
+                    // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æç”»é †ã‚’æ‰‹å‰ã«ã™ã‚‹
                     sr.sortingOrder = 2;
 
-                    // ƒvƒŒƒCƒ„[‚ÌˆÊ’u‚ğİ’è
+                    // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ä½ç½®ã‚’è¨­å®š
                     player.transform.position = GetDisplayPosition( x, y );
 
-                    // ƒvƒŒƒCƒ„[‚ğ˜A‘z”z—ñ‚É’Ç‰Á
+                    // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’é€£æƒ³é…åˆ—ã«è¿½åŠ 
                     gameObjectPosTable.Add( player, new Vector2Int( x, y ) );
                 }
-                // ƒuƒƒbƒN‚Ìê‡
+                // ãƒ–ãƒ­ãƒƒã‚¯ã®å ´åˆ
                 else if ( val == TileType.BLOCK )
                 {
-                    // ƒuƒƒbƒN‚Ì”‚ğ‘‚â‚·
+                    // ãƒ–ãƒ­ãƒƒã‚¯ã®æ•°ã‚’å¢—ã‚„ã™
                     blockCount++;
 
-                    // ƒuƒƒbƒN‚ÌƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚ğì¬
+                    // ãƒ–ãƒ­ãƒƒã‚¯ã®ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆ
                     var block = new GameObject( "block" + blockCount );
 
-                    // ƒuƒƒbƒN‚ÉƒXƒvƒ‰ƒCƒg‚ğ•`‰æ‚·‚é‹@”\‚ğ’Ç‰Á
+                    // ãƒ–ãƒ­ãƒƒã‚¯ã«ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã‚’æç”»ã™ã‚‹æ©Ÿèƒ½ã‚’è¿½åŠ 
                     sr = block.AddComponent<SpriteRenderer>();
 
-                    // ƒuƒƒbƒN‚ÌƒXƒvƒ‰ƒCƒg‚ğİ’è
+                    // ãƒ–ãƒ­ãƒƒã‚¯ã®ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã‚’è¨­å®š
                     sr.sprite = blockSprite;
 
-                    // ƒuƒƒbƒN‚Ì•`‰æ‡‚ğè‘O‚É‚·‚é
+                    // ãƒ–ãƒ­ãƒƒã‚¯ã®æç”»é †ã‚’æ‰‹å‰ã«ã™ã‚‹
                     sr.sortingOrder = 2;
 
-                    // ƒuƒƒbƒN‚ÌˆÊ’u‚ğİ’è
+                    // ãƒ–ãƒ­ãƒƒã‚¯ã®ä½ç½®ã‚’è¨­å®š
                     block.transform.position = GetDisplayPosition( x, y );
 
-                    // ƒuƒƒbƒN‚ğ˜A‘z”z—ñ‚É’Ç‰Á
+                    // ãƒ–ãƒ­ãƒƒã‚¯ã‚’é€£æƒ³é…åˆ—ã«è¿½åŠ 
                     gameObjectPosTable.Add( block, new Vector2Int( x, y ) );
                 }
             }
         }
     }
 
-    // w’è‚³‚ê‚½s”Ô†‚Æ—ñ”Ô†‚©‚çƒXƒvƒ‰ƒCƒg‚Ì•\¦ˆÊ’u‚ğŒvZ‚µ‚Ä•Ô‚·
+    // æŒ‡å®šã•ã‚ŒãŸè¡Œç•ªå·ã¨åˆ—ç•ªå·ã‹ã‚‰ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®è¡¨ç¤ºä½ç½®ã‚’è¨ˆç®—ã—ã¦è¿”ã™
     private Vector2 GetDisplayPosition( int x, int y )
     {
         return new Vector2
@@ -196,29 +204,29 @@ public class Sokoban : MonoBehaviour
         );
     }
 
-    // w’è‚³‚ê‚½ˆÊ’u‚É‘¶İ‚·‚éƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚ğ•Ô‚µ‚Ü‚·
+    // æŒ‡å®šã•ã‚ŒãŸä½ç½®ã«å­˜åœ¨ã™ã‚‹ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¿”ã—ã¾ã™
     private GameObject GetGameObjectAtPosition( Vector2Int pos )
     {
         foreach ( var pair in gameObjectPosTable )
         {
-            // w’è‚³‚ê‚½ˆÊ’u‚ªŒ©‚Â‚©‚Á‚½ê‡
+            // æŒ‡å®šã•ã‚ŒãŸä½ç½®ãŒè¦‹ã¤ã‹ã£ãŸå ´åˆ
             if ( pair.Value == pos )
             {
-                // ‚»‚ÌˆÊ’u‚É‘¶İ‚·‚éƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚ğ•Ô‚·
+                // ãã®ä½ç½®ã«å­˜åœ¨ã™ã‚‹ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¿”ã™
                 return pair.Key;
             }
         }
         return null;
     }
 
-    // w’è‚³‚ê‚½ˆÊ’u‚Ìƒ^ƒCƒ‹‚ªƒuƒƒbƒN‚È‚ç true ‚ğ•Ô‚·
+    // æŒ‡å®šã•ã‚ŒãŸä½ç½®ã®ã‚¿ã‚¤ãƒ«ãŒãƒ–ãƒ­ãƒƒã‚¯ãªã‚‰ true ã‚’è¿”ã™
     private bool IsBlock( Vector2Int pos )
     {
         var cell = tileList[ pos.x, pos.y ];
         return cell == TileType.BLOCK || cell == TileType.BLOCK_ON_TARGET;
     }
 
-    // w’è‚³‚ê‚½ˆÊ’u‚ªƒXƒe[ƒW“à‚È‚ç true ‚ğ•Ô‚·
+    // æŒ‡å®šã•ã‚ŒãŸä½ç½®ãŒã‚¹ãƒ†ãƒ¼ã‚¸å†…ãªã‚‰ true ã‚’è¿”ã™
     private bool IsValidPosition( Vector2Int pos )
     {
         if ( 0 <= pos.x && pos.x < columns && 0 <= pos.y && pos.y < rows )
@@ -228,162 +236,164 @@ public class Sokoban : MonoBehaviour
         return false;
     }
 
-    // –ˆƒtƒŒ[ƒ€ŒÄ‚Ño‚³‚ê‚é
+    // æ¯ãƒ•ãƒ¬ãƒ¼ãƒ å‘¼ã³å‡ºã•ã‚Œã‚‹
     private void Update()
     {
-        // ƒQ[ƒ€ƒNƒŠƒA‚µ‚Ä‚¢‚éê‡‚Í‘€ì‚Å‚«‚È‚¢‚æ‚¤‚É‚·‚é
-        if ( isClear ) return;
-
-        // ã–îˆó‚ª‰Ÿ‚³‚ê‚½ê‡
+        // ã‚²ãƒ¼ãƒ ã‚¯ãƒªã‚¢ã—ã¦ã„ã‚‹å ´åˆã¯æ“ä½œã§ããªã„ã‚ˆã†ã«ã™ã‚‹
+        //if ( isClear)
+        //{
+        //    return;
+        //}
+        // ä¸ŠçŸ¢å°ãŒæŠ¼ã•ã‚ŒãŸå ´åˆ
         if ( Input.GetKeyDown( KeyCode.W ) )
         {
-            // ƒvƒŒƒCƒ„[‚ªã‚ÉˆÚ“®‚Å‚«‚é‚©ŒŸØ
+            // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒä¸Šã«ç§»å‹•ã§ãã‚‹ã‹æ¤œè¨¼
             TryMovePlayer( DirectionType.UP );
         }
-        // ‰E–îˆó‚ª‰Ÿ‚³‚ê‚½ê‡
+        // å³çŸ¢å°ãŒæŠ¼ã•ã‚ŒãŸå ´åˆ
         else if ( Input.GetKeyDown( KeyCode.D ) )
         {
-            // ƒvƒŒƒCƒ„[‚ª‰E‚ÉˆÚ“®‚Å‚«‚é‚©ŒŸØ
+            // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒå³ã«ç§»å‹•ã§ãã‚‹ã‹æ¤œè¨¼
             TryMovePlayer( DirectionType.RIGHT );
         }
-        // ‰º–îˆó‚ª‰Ÿ‚³‚ê‚½ê‡
+        // ä¸‹çŸ¢å°ãŒæŠ¼ã•ã‚ŒãŸå ´åˆ
         else if ( Input.GetKeyDown( KeyCode.S ) )
         {
-            // ƒvƒŒƒCƒ„[‚ª‰º‚ÉˆÚ“®‚Å‚«‚é‚©ŒŸØ
+            // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒä¸‹ã«ç§»å‹•ã§ãã‚‹ã‹æ¤œè¨¼
             TryMovePlayer( DirectionType.DOWN );
         }
-        // ¶–îˆó‚ª‰Ÿ‚³‚ê‚½ê‡
+        // å·¦çŸ¢å°ãŒæŠ¼ã•ã‚ŒãŸå ´åˆ
         else if ( Input.GetKeyDown( KeyCode.A) )
         {
-            // ƒvƒŒƒCƒ„[‚ª¶‚ÉˆÚ“®‚Å‚«‚é‚©ŒŸØ
+            // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒå·¦ã«ç§»å‹•ã§ãã‚‹ã‹æ¤œè¨¼
             TryMovePlayer( DirectionType.LEFT );
         }
-        //R‚ğ‰Ÿ‚·‚ÆƒŠƒZƒbƒg
+        //Rã‚’æŠ¼ã™ã¨ãƒªã‚»ãƒƒãƒˆ
         if (Input.GetKeyDown( KeyCode.R))
         {
             SceneManager.LoadScene("GameScene");
         }
     }
 
-    // w’è‚³‚ê‚½•ûŒü‚ÉƒvƒŒƒCƒ„[‚ªˆÚ“®‚Å‚«‚é‚©ŒŸØ
-    // ˆÚ“®‚Å‚«‚éê‡‚ÍˆÚ“®‚·‚é
+    // æŒ‡å®šã•ã‚ŒãŸæ–¹å‘ã«ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒç§»å‹•ã§ãã‚‹ã‹æ¤œè¨¼
+    // ç§»å‹•ã§ãã‚‹å ´åˆã¯ç§»å‹•ã™ã‚‹
     private void TryMovePlayer( DirectionType direction )
     {
-        // ƒvƒŒƒCƒ„[‚ÌŒ»İ’n‚ğæ“¾
+        // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç¾åœ¨åœ°ã‚’å–å¾—
         var currentPlayerPos = gameObjectPosTable[ player ];
 
-        // ƒvƒŒƒCƒ„[‚ÌˆÚ“®æ‚ÌˆÊ’u‚ğŒvZ
+        // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç§»å‹•å…ˆã®ä½ç½®ã‚’è¨ˆç®—
         var nextPlayerPos = GetNextPositionAlong( currentPlayerPos, direction );
 
-        // ƒvƒŒƒCƒ„[‚ÌˆÚ“®æ‚ªƒXƒe[ƒW“à‚Å‚Í‚È‚¢ê‡‚Í–³‹
+        // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç§»å‹•å…ˆãŒã‚¹ãƒ†ãƒ¼ã‚¸å†…ã§ã¯ãªã„å ´åˆã¯ç„¡è¦–
         if ( !IsValidPosition( nextPlayerPos ) ) return;
 
-        // ƒvƒŒƒCƒ„[‚ÌˆÚ“®æ‚ÉƒuƒƒbƒN‚ª‘¶İ‚·‚éê‡
+        // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç§»å‹•å…ˆã«ãƒ–ãƒ­ãƒƒã‚¯ãŒå­˜åœ¨ã™ã‚‹å ´åˆ
         if ( IsBlock( nextPlayerPos ) )
         {
-            // ƒuƒƒbƒN‚ÌˆÚ“®æ‚ÌˆÊ’u‚ğŒvZ
+            // ãƒ–ãƒ­ãƒƒã‚¯ã®ç§»å‹•å…ˆã®ä½ç½®ã‚’è¨ˆç®—
             var nextBlockPos = GetNextPositionAlong( nextPlayerPos, direction );
 
-            // ƒuƒƒbƒN‚ÌˆÚ“®æ‚ªƒXƒe[ƒW“à‚Ìê‡‚©‚Â
-            // ƒuƒƒbƒN‚ÌˆÚ“®æ‚ÉƒuƒƒbƒN‚ª‘¶İ‚µ‚È‚¢ê‡
+            // ãƒ–ãƒ­ãƒƒã‚¯ã®ç§»å‹•å…ˆãŒã‚¹ãƒ†ãƒ¼ã‚¸å†…ã®å ´åˆã‹ã¤
+            // ãƒ–ãƒ­ãƒƒã‚¯ã®ç§»å‹•å…ˆã«ãƒ–ãƒ­ãƒƒã‚¯ãŒå­˜åœ¨ã—ãªã„å ´åˆ
             if ( IsValidPosition( nextBlockPos ) && !IsBlock( nextBlockPos ) )
             {
-                // ˆÚ“®‚·‚éƒuƒƒbƒN‚ğæ“¾
+                // ç§»å‹•ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã‚’å–å¾—
                 var block = GetGameObjectAtPosition( nextPlayerPos );
 
-                // ƒvƒŒƒCƒ„[‚ÌˆÚ“®æ‚Ìƒ^ƒCƒ‹‚Ìî•ñ‚ğXV
+                // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç§»å‹•å…ˆã®ã‚¿ã‚¤ãƒ«ã®æƒ…å ±ã‚’æ›´æ–°
                 UpdateGameObjectPosition( nextPlayerPos );
 
-                // ƒuƒƒbƒN‚ğˆÚ“®
+                // ãƒ–ãƒ­ãƒƒã‚¯ã‚’ç§»å‹•
                 block.transform.position = GetDisplayPosition( nextBlockPos.x, nextBlockPos.y );
 
-                // ƒuƒƒbƒN‚ÌˆÊ’u‚ğXV
+                // ãƒ–ãƒ­ãƒƒã‚¯ã®ä½ç½®ã‚’æ›´æ–°
                 gameObjectPosTable[ block ] = nextBlockPos;
 
-                // ƒuƒƒbƒN‚ÌˆÚ“®æ‚Ì”Ô†‚ğXV
+                // ãƒ–ãƒ­ãƒƒã‚¯ã®ç§»å‹•å…ˆã®ç•ªå·ã‚’æ›´æ–°
                 if ( tileList[ nextBlockPos.x, nextBlockPos.y ] == TileType.GROUND )
                 {
-                    // ˆÚ“®æ‚ª’n–Ê‚È‚çƒuƒƒbƒN‚Ì”Ô†‚ÉXV
+                    // ç§»å‹•å…ˆãŒåœ°é¢ãªã‚‰ãƒ–ãƒ­ãƒƒã‚¯ã®ç•ªå·ã«æ›´æ–°
                     tileList[ nextBlockPos.x, nextBlockPos.y ] = TileType.BLOCK;
                 }
                 else if ( tileList[ nextBlockPos.x, nextBlockPos.y ] == TileType.TARGET )
                 {
-                    // ˆÚ“®æ‚ª–Ú“I’n‚È‚çƒuƒƒbƒNi–Ú“I’n‚Ìãj‚Ì”Ô†‚ÉXV
+                    // ç§»å‹•å…ˆãŒç›®çš„åœ°ãªã‚‰ãƒ–ãƒ­ãƒƒã‚¯ï¼ˆç›®çš„åœ°ã®ä¸Šï¼‰ã®ç•ªå·ã«æ›´æ–°
                     tileList[ nextBlockPos.x, nextBlockPos.y ] = TileType.BLOCK_ON_TARGET;
                 }
 
-                // ƒvƒŒƒCƒ„[‚ÌŒ»İ’n‚Ìƒ^ƒCƒ‹‚Ìî•ñ‚ğXV
+                // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç¾åœ¨åœ°ã®ã‚¿ã‚¤ãƒ«ã®æƒ…å ±ã‚’æ›´æ–°
                 UpdateGameObjectPosition( currentPlayerPos );
 
-                // ƒvƒŒƒCƒ„[‚ğˆÚ“®
+                // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ç§»å‹•
                 player.transform.position = GetDisplayPosition( nextPlayerPos.x, nextPlayerPos.y );
 
-                // ƒvƒŒƒCƒ„[‚ÌˆÊ’u‚ğXV
+                // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ä½ç½®ã‚’æ›´æ–°
                 gameObjectPosTable[ player ] = nextPlayerPos;
 
-                // ƒvƒŒƒCƒ„[‚ÌˆÚ“®æ‚Ì”Ô†‚ğXV
+                // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç§»å‹•å…ˆã®ç•ªå·ã‚’æ›´æ–°
                 if ( tileList[ nextPlayerPos.x, nextPlayerPos.y ] == TileType.GROUND )
                 {
-                    // ˆÚ“®æ‚ª’n–Ê‚È‚çƒvƒŒƒCƒ„[‚Ì”Ô†‚ÉXV
+                    // ç§»å‹•å…ˆãŒåœ°é¢ãªã‚‰ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç•ªå·ã«æ›´æ–°
                     tileList[ nextPlayerPos.x, nextPlayerPos.y ] = TileType.PLAYER;
                 }
                 else if ( tileList[ nextPlayerPos.x, nextPlayerPos.y ] == TileType.TARGET )
                 {
-                    // ˆÚ“®æ‚ª–Ú“I’n‚È‚çƒvƒŒƒCƒ„[i–Ú“I’n‚Ìãj‚Ì”Ô†‚ÉXV
+                    // ç§»å‹•å…ˆãŒç›®çš„åœ°ãªã‚‰ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ï¼ˆç›®çš„åœ°ã®ä¸Šï¼‰ã®ç•ªå·ã«æ›´æ–°
                     tileList[ nextPlayerPos.x, nextPlayerPos.y ] = TileType.PLAYER_ON_TARGET;
                 }
             }
         }
-        // ƒvƒŒƒCƒ„[‚ÌˆÚ“®æ‚ÉƒuƒƒbƒN‚ª‘¶İ‚µ‚È‚¢ê‡
+        // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç§»å‹•å…ˆã«ãƒ–ãƒ­ãƒƒã‚¯ãŒå­˜åœ¨ã—ãªã„å ´åˆ
         else
         {
-            // ƒvƒŒƒCƒ„[‚ÌŒ»İ’n‚Ìƒ^ƒCƒ‹‚Ìî•ñ‚ğXV
+            // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç¾åœ¨åœ°ã®ã‚¿ã‚¤ãƒ«ã®æƒ…å ±ã‚’æ›´æ–°
             UpdateGameObjectPosition( currentPlayerPos );
 
-            // ƒvƒŒƒCƒ„[‚ğˆÚ“®
+            // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ç§»å‹•
             player.transform.position = GetDisplayPosition( nextPlayerPos.x, nextPlayerPos.y );
 
-            // ƒvƒŒƒCƒ„[‚ÌˆÊ’u‚ğXV
+            // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ä½ç½®ã‚’æ›´æ–°
             gameObjectPosTable[ player ] = nextPlayerPos;
 
-            // ƒvƒŒƒCƒ„[‚ÌˆÚ“®æ‚Ì”Ô†‚ğXV
+            // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç§»å‹•å…ˆã®ç•ªå·ã‚’æ›´æ–°
             if ( tileList[ nextPlayerPos.x, nextPlayerPos.y ] == TileType.GROUND )
             {
-                // ˆÚ“®æ‚ª’n–Ê‚È‚çƒvƒŒƒCƒ„[‚Ì”Ô†‚ÉXV
+                // ç§»å‹•å…ˆãŒåœ°é¢ãªã‚‰ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç•ªå·ã«æ›´æ–°
                 tileList[ nextPlayerPos.x, nextPlayerPos.y ] = TileType.PLAYER;
             }
             else if ( tileList[ nextPlayerPos.x, nextPlayerPos.y ] == TileType.TARGET )
             {
-                // ˆÚ“®æ‚ª–Ú“I’n‚È‚çƒvƒŒƒCƒ„[i–Ú“I’n‚Ìãj‚Ì”Ô†‚ÉXV
+                // ç§»å‹•å…ˆãŒç›®çš„åœ°ãªã‚‰ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ï¼ˆç›®çš„åœ°ã®ä¸Šï¼‰ã®ç•ªå·ã«æ›´æ–°
                 tileList[ nextPlayerPos.x, nextPlayerPos.y ] = TileType.PLAYER_ON_TARGET;
             }
         }
 
-        // ƒQ[ƒ€‚ğƒNƒŠƒA‚µ‚½‚©‚Ç‚¤‚©Šm”F
+        // ã‚²ãƒ¼ãƒ ã‚’ã‚¯ãƒªã‚¢ã—ãŸã‹ã©ã†ã‹ç¢ºèª
         CheckCompletion();
     }
 
-    // w’è‚³‚ê‚½•ûŒü‚ÌˆÊ’u‚ğ•Ô‚·
+    // æŒ‡å®šã•ã‚ŒãŸæ–¹å‘ã®ä½ç½®ã‚’è¿”ã™
     private Vector2Int GetNextPositionAlong( Vector2Int pos, DirectionType direction )
     {
         switch ( direction )
         {
-            // ã
+            // ä¸Š
             case DirectionType.UP:
                 pos.y -= 1;
                 break;
 
-            // ‰E
+            // å³
             case DirectionType.RIGHT:
                 pos.x += 1;
                 break;
 
-            // ‰º
+            // ä¸‹
             case DirectionType.DOWN:
                 pos.y += 1;
                 break;
 
-            // ¶
+            // å·¦
             case DirectionType.LEFT:
                 pos.x -= 1;
                 break;
@@ -391,30 +401,30 @@ public class Sokoban : MonoBehaviour
         return pos;
     }
 
-    // w’è‚³‚ê‚½ˆÊ’u‚Ìƒ^ƒCƒ‹‚ğXV
+    // æŒ‡å®šã•ã‚ŒãŸä½ç½®ã®ã‚¿ã‚¤ãƒ«ã‚’æ›´æ–°
     private void UpdateGameObjectPosition( Vector2Int pos )
     {
-        // w’è‚³‚ê‚½ˆÊ’u‚Ìƒ^ƒCƒ‹‚Ì”Ô†‚ğæ“¾
+        // æŒ‡å®šã•ã‚ŒãŸä½ç½®ã®ã‚¿ã‚¤ãƒ«ã®ç•ªå·ã‚’å–å¾—
         var cell = tileList[ pos.x, pos.y ];
 
-        // ƒvƒŒƒCƒ„[‚à‚µ‚­‚ÍƒuƒƒbƒN‚Ìê‡
+        // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚‚ã—ãã¯ãƒ–ãƒ­ãƒƒã‚¯ã®å ´åˆ
         if ( cell == TileType.PLAYER || cell == TileType.BLOCK )
         {
-            // ’n–Ê‚É•ÏX
+            // åœ°é¢ã«å¤‰æ›´
             tileList[ pos.x, pos.y ] = TileType.GROUND;
         }
-        // –Ú“I’n‚Éæ‚Á‚Ä‚¢‚éƒvƒŒƒCƒ„[‚à‚µ‚­‚ÍƒuƒƒbƒN‚Ìê‡
+        // ç›®çš„åœ°ã«ä¹—ã£ã¦ã„ã‚‹ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚‚ã—ãã¯ãƒ–ãƒ­ãƒƒã‚¯ã®å ´åˆ
         else if ( cell == TileType.PLAYER_ON_TARGET || cell == TileType.BLOCK_ON_TARGET )
         {
-            // –Ú“I’n‚É•ÏX
+            // ç›®çš„åœ°ã«å¤‰æ›´
             tileList[ pos.x, pos.y ] = TileType.TARGET;
         }
     }
 
-    // ƒQ[ƒ€‚ğƒNƒŠƒA‚µ‚½‚©‚Ç‚¤‚©Šm”F
+    // ã‚²ãƒ¼ãƒ ã‚’ã‚¯ãƒªã‚¢ã—ãŸã‹ã©ã†ã‹ç¢ºèª
     private void CheckCompletion()
     {
-        // –Ú“I’n‚Éæ‚Á‚Ä‚¢‚éƒuƒƒbƒN‚Ì”‚ğŒvZ
+        // ç›®çš„åœ°ã«ä¹—ã£ã¦ã„ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã®æ•°ã‚’è¨ˆç®—
         int blockOnTargetCount = 0;
 
         for ( int y = 0; y < rows; y++ )
@@ -428,11 +438,13 @@ public class Sokoban : MonoBehaviour
             }
         }
 
-        // ‚·‚×‚Ä‚ÌƒuƒƒbƒN‚ª–Ú“I’n‚Ìã‚Éæ‚Á‚Ä‚¢‚éê‡
+        // ã™ã¹ã¦ã®ãƒ–ãƒ­ãƒƒã‚¯ãŒç›®çš„åœ°ã®ä¸Šã«ä¹—ã£ã¦ã„ã‚‹å ´åˆ
         if ( blockOnTargetCount == blockCount )
         {
-            // ƒQ[ƒ€ƒNƒŠƒA
-            isClear = true;
+            cnt++;
+            // ã‚²ãƒ¼ãƒ ã‚¯ãƒªã‚¢
+            //isClear = true;
+            Debug.Log("GameClear");
         }
     }
 }
