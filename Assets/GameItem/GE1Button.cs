@@ -1,10 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 using UnityEngine.SceneManagement;
 
-public class Startbutton : MonoBehaviour
+public class GE1Button : MonoBehaviour
 {
     public void OnClickStartButton()
     {

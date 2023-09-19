@@ -47,9 +47,9 @@ public class Sokoban : MonoBehaviour
     private bool isClear; // ゲームをクリアした場合 true
 
     //ステージファイル
-    string[] stage = {"stage1","stage2","stage3","stageEX" };
+    //string[] stage = {"stage1","stage2","stage3","stageEX" };
 
-    int cnt;
+    //int cnt;
 
     // 各位置に存在するゲームオブジェクトを管理する連想配列
     private Dictionary<GameObject, Vector2Int> gameObjectPosTable = new Dictionary<GameObject, Vector2Int>();
@@ -66,7 +66,7 @@ public class Sokoban : MonoBehaviour
     private void LoadTileData()
     {
         //string path = stage[cnt];
-        var stageFile = Resources.Load(stage[cnt]) as TextAsset;
+        //var stageFile = Resources.Load(stage[cnt]) as TextAsset;
         // タイルの情報を一行ごとに分割
         var lines = stageFile.text.Split
         (
@@ -271,7 +271,7 @@ public class Sokoban : MonoBehaviour
         //Rを押すとリセット
         if (Input.GetKeyDown( KeyCode.R))
         {
-            SceneManager.LoadScene("GameScene");
+            SceneManager.LoadScene("GameScene1");
         }
     }
 
