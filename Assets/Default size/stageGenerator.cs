@@ -240,10 +240,10 @@ public class Sokoban : MonoBehaviour
     private void Update()
     {
         // ゲームクリアしている場合は操作できないようにする
-        //if ( isClear)
-        //{
-        //    return;
-        //}
+        if (isClear)
+        {
+            return;
+        }
         // 上矢印が押された場合
         if ( Input.GetKeyDown( KeyCode.W ) )
         {
@@ -441,9 +441,9 @@ public class Sokoban : MonoBehaviour
         // すべてのブロックが目的地の上に乗っている場合
         if ( blockOnTargetCount == blockCount )
         {
-            cnt++;
+            //cnt++;
             // ゲームクリア
-            //isClear = true;
+            isClear = true;
             Debug.Log("GameClear");
         }
     }

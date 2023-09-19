@@ -1,13 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 using UnityEngine.SceneManagement;
 
-public class Rbutton : MonoBehaviour
+public class rookieButton : MonoBehaviour
 {
     public void OnClickStartButton()
     {
-        SceneManager.LoadScene("GameScene");
+        SceneManager.LoadScene("rookieScene");
     }
 }

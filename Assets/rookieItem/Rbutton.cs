@@ -4,10 +4,10 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 
-public class Rbutton : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
     public void OnClickStartButton()
     {
-        SceneManager.LoadScene("GameScene");
+        SceneManager.LoadScene("TitleScene");
     }
 }
