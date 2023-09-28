@@ -410,7 +410,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 561046880}
-  - component: {fileID: 561046879}
+  - component: {fileID: 561046881}
   m_Layer: 0
   m_Name: Stage
   m_TagString: Untagged
@@ -418,25 +418,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &561046879
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 561046878}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10999f6b23d13e54eaa8d396a8026233, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stageFile: {fileID: 4900000, guid: 3e003b874fc3a9b4e95eab7b8f95ea8a, type: 3}
-  tileSize: 0.64
-  Sprite: {fileID: 0}
-  groundSprite: {fileID: 21300000, guid: 957f6f30f6e92364bbab6d376a03b456, type: 3}
-  targetSprite: {fileID: 21300000, guid: 1c442ac417ccdc044a400f9b0d8c12b3, type: 3}
-  playerSprite: {fileID: 21300000, guid: 81c92b7e42501c048b6dd9cfd2a67a3c, type: 3}
-  blockSprite: {fileID: 21300000, guid: 55c054b4dcf8bb94aad00b7433be3c80, type: 3}
 --- !u!4 &561046880
 Transform:
   m_ObjectHideFlags: 0
@@ -452,6 +433,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &561046881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 561046878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1db8a4e5e456048428ae94f67c6555c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stageFile: {fileID: 4900000, guid: 40af37d197f28d541ac7c3c77f18f515, type: 3}
+  tileSize: 0.64
+  Sprite: {fileID: 0}
+  groundSprite: {fileID: 21300000, guid: 5c80f879e8c6edc49a3e3fcfe85283be, type: 3}
+  targetSprite: {fileID: 21300000, guid: 1c442ac417ccdc044a400f9b0d8c12b3, type: 3}
+  playerSprite: {fileID: 21300000, guid: 81c92b7e42501c048b6dd9cfd2a67a3c, type: 3}
+  blockSprite: {fileID: 21300000, guid: f058e8da4f5171748a48832be8023ca6, type: 3}
 --- !u!1 &654022407
 GameObject:
   m_ObjectHideFlags: 0

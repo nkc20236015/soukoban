@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Sokoban : MonoBehaviour
+public class stageGenerator1 : MonoBehaviour
 {
     // タイルの種類
     private enum TileType
@@ -60,6 +60,9 @@ public class Sokoban : MonoBehaviour
     {
         LoadTileData(); // タイルの情報を読み込む
         CreateStage(); // ステージを作成
+
+        //GameClearを取得する
+        GameObject Clear = GameObject.Find("GameClear");
     }
 
     // タイルの情報を読み込む
@@ -271,7 +274,7 @@ public class Sokoban : MonoBehaviour
         //Rを押すとリセット
         if (Input.GetKeyDown( KeyCode.R))
         {
-            SceneManager.LoadScene("GameScene1");
+            SceneManager.LoadScene (SceneManager.GetActiveScene().name);
         }
     }
 
@@ -445,6 +448,7 @@ public class Sokoban : MonoBehaviour
             // ゲームクリア
             isClear = true;
             Debug.Log("GameClear");
+            SceneManager.LoadScene("LevelSelect");
         }
     }
 }

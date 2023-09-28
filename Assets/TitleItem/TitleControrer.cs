@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class TitleControrer : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+        protected bool CheckInstance()
     {
-        DontDestroyOnLoad (this);
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+        Destroy(this.gameObject);
+        return false;
+    }   
 }

@@ -430,13 +430,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10999f6b23d13e54eaa8d396a8026233, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stageFile: {fileID: 4900000, guid: 3e003b874fc3a9b4e95eab7b8f95ea8a, type: 3}
+  stageFile: {fileID: 4900000, guid: 96b3323dca0296746b4b56f9f1035037, type: 3}
   tileSize: 0.64
   Sprite: {fileID: 0}
-  groundSprite: {fileID: 21300000, guid: 957f6f30f6e92364bbab6d376a03b456, type: 3}
-  targetSprite: {fileID: 21300000, guid: 1c442ac417ccdc044a400f9b0d8c12b3, type: 3}
+  groundSprite: {fileID: 21300000, guid: 2c975e61c3f827f4d80eb86b39577560, type: 3}
+  targetSprite: {fileID: 21300000, guid: bccc36e313fadd147a26d5b14e20a6be, type: 3}
   playerSprite: {fileID: 21300000, guid: 81c92b7e42501c048b6dd9cfd2a67a3c, type: 3}
-  blockSprite: {fileID: 21300000, guid: 55c054b4dcf8bb94aad00b7433be3c80, type: 3}
+  blockSprite: {fileID: 21300000, guid: e1e86fdf2d8f54747ab89bb630f109d9, type: 3}
 --- !u!4 &561046880
 Transform:
   m_ObjectHideFlags: 0
