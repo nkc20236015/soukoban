@@ -54,6 +54,7 @@ public class stageGenerator1 : MonoBehaviour
     // 各位置に存在するゲームオブジェクトを管理する連想配列
     private Dictionary<GameObject, Vector2Int> gameObjectPosTable = new Dictionary<GameObject, Vector2Int>();
     
+    public GameObject Clear;
 
     // ゲーム開始時に呼び出される
     private void Start()
@@ -62,7 +63,8 @@ public class stageGenerator1 : MonoBehaviour
         CreateStage(); // ステージを作成
 
         //GameClearを取得する
-        GameObject Clear = GameObject.Find("GameClear");
+        Clear = GameObject.Find("GameClear");
+        Clear.SetActive(false);
     }
 
     // タイルの情報を読み込む
@@ -448,7 +450,13 @@ public class stageGenerator1 : MonoBehaviour
             // ゲームクリア
             isClear = true;
             Debug.Log("GameClear");
-            SceneManager.LoadScene("LevelSelect");
+            Clear.SetActive( true );
+            //三秒後にシーン切り替え
+            InvokeRepeating("Scene",3,0f);
         }
+    }
+    void Scene()
+    {
+         SceneManager.LoadScene("LevelSelect");
     }
 }

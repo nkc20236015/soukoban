@@ -430,7 +430,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10999f6b23d13e54eaa8d396a8026233, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stageFile: {fileID: 4900000, guid: 3e003b874fc3a9b4e95eab7b8f95ea8a, type: 3}
+  stageFile: {fileID: 4900000, guid: e108bcc071ab6404d9af2ece995d6463, type: 3}
   tileSize: 0.64
   Sprite: {fileID: 0}
   groundSprite: {fileID: 21300000, guid: a098ded027a13c941bf722e2b5d66a4e, type: 3}
@@ -470,7 +470,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &654022408
 RectTransform:
   m_ObjectHideFlags: 0
